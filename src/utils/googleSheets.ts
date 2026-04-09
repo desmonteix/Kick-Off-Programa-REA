@@ -7,6 +7,11 @@ interface SeatData {
 
 const SPREADSHEET_ID = '1FV3mWZXktl553AvO36KWx_G1QsFufbzJxOD9c31hFHM';
 
+// Normalizes seat codes: "A-1", "A.1", "A 1" -> "A1"
+function normalizeSeatCode(raw: string): string {
+  return raw.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+}
+
 export async function fetchGoogleSheetsSeats(): Promise<SeatData[]> {
   const apiKey = import.meta.env.VITE_GOOGLE_SHEETS_API_KEY || 'AIzaSyBn-G6uwAlCkOsGUW0D1FLsNiqn9SfHSv4';
   
@@ -43,7 +48,7 @@ export async function fetchGoogleSheetsSeats(): Promise<SeatData[]> {
     const salidasPersonSet = new Set<string>();
     
     for (const row of salidas) {
-      const asiento = row[7] ? String(row[7]).trim().toUpperCase() : '';
+      const asiento = row[7] ? normalizeSeatCode(String(row[7]).trim()) : '';
       const codigoUp = row[5] ? String(row[5]).trim() : '';
       const nombre = row[2] ? String(row[2]).trim() : '';
       
@@ -66,7 +71,7 @@ export async function fetchGoogleSheetsSeats(): Promise<SeatData[]> {
       const row = asistencias[i];
       const nombre = row[2] ? String(row[2]).trim() : '';
       const codigoUp = row[5] ? String(row[5]).trim() : '';
-      const asientoRaw = row[7] ? String(row[7]).trim().toUpperCase() : '';
+      const asientoRaw = row[7] ? normalizeSeatCode(String(row[7]).trim()) : '';
 
       // If no seat assigned, skip
       if (!asientoRaw) continue;
