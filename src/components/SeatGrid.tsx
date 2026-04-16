@@ -47,9 +47,9 @@ function SeatGrid({ seats }: SeatGridProps) {
             {rowLabel}
           </div>
           <div className="flex bg-white rounded-xl">
-            {/* Left block: N20, N19 — plus spacer for missing N21 to keep alignment */}
+            {/* Left block: spacer for missing N21, then N20, N19 */}
+            <div className="w-6 ml-2" />
             {renderSeatBlock(rowLabel, 19, 20)}
-            <div className="w-6 mr-2" />
 
             {/* Aisle */}
             <div className="w-8" />
