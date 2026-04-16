@@ -20,9 +20,10 @@ function SeatGrid({ seats }: SeatGridProps) {
     seatMap.set(s.seat_code.toUpperCase(), s);
   });
 
+  // Renders seats from endCol down to startCol (descending = high numbers on the left)
   const renderSeatBlock = (rowLabel: string, startCol: number, endCol: number) => {
     const blockSeats = [];
-    for (let c = startCol; c <= endCol; c++) {
+    for (let c = endCol; c >= startCol; c--) {
       const code = `${rowLabel}${c}`;
       const found = seatMap.get(code);
       const seat: SeatData = found || {
@@ -36,32 +37,31 @@ function SeatGrid({ seats }: SeatGridProps) {
     return <div className="flex gap-2">{blockSeats}</div>;
   };
 
-
   const renderRow = (rowLabel: string) => {
     if (rowLabel === 'N') {
-      // Row N: seats N1, N2, N3 (left), N19, N20 (right)
+      // Row N: N20, N19 (left) | empty middle | N3, N2, N1 (right)
+      // Row N only goes up to seat 20 (no seat 21)
       return (
         <div key={rowLabel} className="flex items-center gap-4">
           <div className="w-4 text-center font-bold text-gray-400 text-xs">
             {rowLabel}
           </div>
           <div className="flex bg-white rounded-xl">
-            {/* Left Block: N1-N3 */}
-            {renderSeatBlock(rowLabel, 1, 3)}
-            
+            {/* Left block: N20, N19 — plus spacer for missing N21 to keep alignment */}
+            {renderSeatBlock(rowLabel, 19, 20)}
+            <div className="w-6 mr-2" />
+
             {/* Aisle */}
             <div className="w-8" />
-            
-            {/* Empty Middle Block - spacer matching 15 seats (w-6=24px each + gap-2=8px) */}
+
+            {/* Empty Middle Block — spacer matching 15 seats (w-6=24px + gap-2=8px) */}
             <div style={{ width: `${15 * 24 + 14 * 8}px` }} />
 
             {/* Aisle */}
             <div className="w-8" />
-            
-            {/* Right Block: N19-N20 */}
-            {renderSeatBlock(rowLabel, 19, 20)}
-            {/* Spacer for missing seat 21 to keep alignment */}
-            <div className="w-6 ml-2" />
+
+            {/* Right block: N3, N2, N1 */}
+            {renderSeatBlock(rowLabel, 1, 3)}
           </div>
           <div className="w-4 text-center font-bold text-gray-400 text-xs">
             {rowLabel}
@@ -70,8 +70,7 @@ function SeatGrid({ seats }: SeatGridProps) {
       );
     }
 
-    // Standard rows A-M: seats 1-3 (left), 4-18 (middle), 19-21 (right)
-    // Left = seat 1, Right = seat 21
+    // Standard rows A-M: [21,20,19] | aisle | [18..4] | aisle | [3,2,1]
     return (
       <div key={rowLabel} className="flex items-center gap-4">
         <div className="w-4 text-center font-bold text-gray-400 text-xs">
@@ -79,20 +78,20 @@ function SeatGrid({ seats }: SeatGridProps) {
         </div>
 
         <div className="flex bg-white rounded-xl">
-          {/* Left Block: seats 1-3 */}
-          {renderSeatBlock(rowLabel, 1, 3)}
-          
+          {/* Left block: seats 21, 20, 19 */}
+          {renderSeatBlock(rowLabel, 19, 21)}
+
           {/* Aisle */}
           <div className="w-8" />
-          
-          {/* Middle Block: seats 4-18 */}
+
+          {/* Middle block: seats 18 → 4 */}
           {renderSeatBlock(rowLabel, 4, 18)}
 
           {/* Aisle */}
           <div className="w-8" />
-          
-          {/* Right Block: seats 19-21 */}
-          {renderSeatBlock(rowLabel, 19, 21)}
+
+          {/* Right block: seats 3, 2, 1 */}
+          {renderSeatBlock(rowLabel, 1, 3)}
         </div>
 
         <div className="w-4 text-center font-bold text-gray-400 text-xs">
