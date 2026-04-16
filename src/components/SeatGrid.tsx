@@ -36,6 +36,7 @@ function SeatGrid({ seats }: SeatGridProps) {
     return <div className="flex gap-2">{blockSeats}</div>;
   };
 
+
   const renderRow = (rowLabel: string) => {
     if (rowLabel === 'N') {
       // Row N: seats N1, N2, N3 (left), N19, N20 (right)
@@ -45,7 +46,7 @@ function SeatGrid({ seats }: SeatGridProps) {
             {rowLabel}
           </div>
           <div className="flex bg-white rounded-xl">
-            {/* Left Block (1-3) */}
+            {/* Left Block: N1-N3 */}
             {renderSeatBlock(rowLabel, 1, 3)}
             
             {/* Aisle */}
@@ -57,7 +58,7 @@ function SeatGrid({ seats }: SeatGridProps) {
             {/* Aisle */}
             <div className="w-8" />
             
-            {/* Right Block (19-20) */}
+            {/* Right Block: N19-N20 */}
             {renderSeatBlock(rowLabel, 19, 20)}
             {/* Spacer for missing seat 21 to keep alignment */}
             <div className="w-6 ml-2" />
@@ -69,7 +70,8 @@ function SeatGrid({ seats }: SeatGridProps) {
       );
     }
 
-    // Standard rows A-M: 3 left + 15 middle + 3 right = 21 seats
+    // Standard rows A-M: seats 1-3 (left), 4-18 (middle), 19-21 (right)
+    // Left = seat 1, Right = seat 21
     return (
       <div key={rowLabel} className="flex items-center gap-4">
         <div className="w-4 text-center font-bold text-gray-400 text-xs">
@@ -77,19 +79,19 @@ function SeatGrid({ seats }: SeatGridProps) {
         </div>
 
         <div className="flex bg-white rounded-xl">
-          {/* Left Block (1-3) */}
+          {/* Left Block: seats 1-3 */}
           {renderSeatBlock(rowLabel, 1, 3)}
           
           {/* Aisle */}
           <div className="w-8" />
           
-          {/* Middle Block (4-18) */}
+          {/* Middle Block: seats 4-18 */}
           {renderSeatBlock(rowLabel, 4, 18)}
 
           {/* Aisle */}
           <div className="w-8" />
           
-          {/* Right Block (19-21) */}
+          {/* Right Block: seats 19-21 */}
           {renderSeatBlock(rowLabel, 19, 21)}
         </div>
 

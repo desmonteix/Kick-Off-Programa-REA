@@ -5,7 +5,7 @@ interface SeatData {
   participant_name: string | null;
 }
 
-const SPREADSHEET_ID = '1FV3mWZXktl553AvO36KWx_G1QsFufbzJxOD9c31hFHM';
+const SPREADSHEET_ID = '1-yufyr4nWj9g5MUnbYSKnDLk7-lH8_MwgPJEfjSkrO8';
 
 // Normalizes seat codes: "A-1", "A.1", "A 1" -> "A1"
 function normalizeSeatCode(raw: string): string {
